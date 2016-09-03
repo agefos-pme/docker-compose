@@ -1,0 +1,12 @@
+Bind:
+  image: sameersbn/bind:latest
+  container_name: bind
+  environment:
+    - VIRTUAL_HOST: dns.o2
+    - VIRTUAL_PORT: 10000
+  ports:
+    - "53:53/udp"
+    - "10000:10000/tcp"
+  volumes:
+    - /srv/configuration/bind:/data
+  restart: always
