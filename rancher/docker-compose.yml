@@ -1,11 +1,23 @@
-rancher:
-  container_name: "rancher"
-  restart: always
-  image: rancher/server
-  ports:
-  - 8080:8080
-  environment:
-  - VIRTUAL_HOST=rancher.o2
-  - VIRTUAL_PORT=8080
-  volumes:
-  - '/srv/rancher/mysql:/var/lib/mysql:rw'
+version: '2'
+services:
+  rancher:
+    restart: always
+    image: rancher/server
+    ports:
+    - "8080:8080"
+    environment:
+      # - CATTLE_DB_CATTLE_MYSQL_HOST=localhost
+      # - CATTLE_DB_CATTLE_MYSQL_PORT=3306
+      # - CATTLE_DB_CATTLE_MYSQL_NAME=cattle
+      # - CATTLE_DB_CATTLE_USERNAME=cattle
+      # - CATTLE_DB_CATTLE_PASSWORD=cattle
+      - http_proxy=$HTTP_PROXY
+      - https_proxy=$HTTP_PROXY
+      - no_proxy="localhost,127.0.0.1"
+    volumes_from:
+      - rancher-config
+
+  rancher-config:
+    image: debian:jessie
+    volumes:
+      - /srv/rancher/mysql:/var/lib/mysql:rw
